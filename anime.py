@@ -5,6 +5,7 @@ import gdown
 import os
 import pathlib
 import platform
+import random
 import sys
 from fastai.collab import load_learner
 
@@ -47,8 +48,11 @@ def main():
             learn = load_learner(model_path)
             dls = learn.dls
         
+        # Get anime list and shuffle it randomly
+        anime_list = list(dls.classes['Anime Title'])
+        random.shuffle(anime_list)
+        
         # Dropdown for user to select an anime
-        anime_list = dls.classes['Anime Title']
         selected_anime = st.selectbox("Select an anime:", anime_list)
         
         if st.button("Get Recommendations"):
