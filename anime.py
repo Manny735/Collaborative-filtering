@@ -55,4 +55,26 @@ def main():
             st.session_state.randomized_anime_list = anime_list
         
         # Use the stored randomized list
-        selected_anime = st.selectbox("Select an anime:", st.session_state.randomized_ani
+        selected_anime = st.selectbox("Select an anime:", st.session_state.randomized_anime_list)
+        
+        if st.button("Get Recommendations"):
+            with st.spinner("Finding similar anime..."):
+                # Compute similarities
+                anime_factors = learn.model.i_weight.weight
+                idx = dls.classes['Anime Title'].o2i[selected_anime]
+                distances = nn.CosineSimilarity(dim=1)(anime_factors, anime_factors[idx][None])
+                idx = distances.argsort(descending=True)[1:11]
+                recommendations = [dls.classes['Anime Title'][i] for i in idx]
+                
+                # Display recommendations
+                st.success("Recommendations generated!")
+                st.write("### Top 10 Similar Anime:")
+                for i, anime in enumerate(recommendations, 1):
+                    st.write(f"{i}. {anime}")
+                
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        st.info("If this is the first run, please try refreshing the page.")
+
+if __name__ == "__main__":
+    main()
