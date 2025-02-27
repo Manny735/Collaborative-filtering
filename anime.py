@@ -55,7 +55,7 @@ def main():
             st.session_state.randomized_anime_list = anime_list
         
         # Use the stored randomized list
-        selected_anime = st.selectbox("Select an anime:", st.session_state.randomized_anime_list)
+        selected_anime = st.selectbox("Select or write an anime:", st.session_state.randomized_anime_list)
         
         if st.button("Get Recommendations"):
             with st.spinner("Finding similar anime..."):
